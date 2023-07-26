@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 let notesData = data;
 
+const categories = ["Task", "Random Thought", "Idea"];
 
 renderNotesList(notesData);
 
@@ -103,12 +104,6 @@ function closeEditForm() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  addEventListenersToButtons();
-  renderNotesList(notesData);
-});
-
-
 const formEl = document.getElementById('addNoteForm');
 
 formEl.addEventListener('submit', onFormSubmit);
@@ -184,12 +179,56 @@ function renderNotesList(data) {
   });
 
   listEl.innerHTML = notesListMarkup.join();
+  renderSummaryList(data)
   // addEventListenersToButtons();
+};
+
+function separateAndCountByCategory(data) {
+  const categoryCounts = data.reduce((acc, item) => {
+    const { category, isArchived } = item;
+    const existingCategory = acc.find((c) => c.category === category);
+
+    if (existingCategory) {
+      if (isArchived) {
+        existingCategory.archived++;
+      } else {
+        existingCategory.active++;
+      }
+    } else {
+      const newCategory = {
+        category,
+        active: isArchived ? 0 : 1,
+        archived: isArchived ? 1 : 0,
+      };
+      acc.push(newCategory);
+    }
+
+    return acc;
+  }, []);
+   return categoryCounts;
+};
+
+function renderSummaryList(data) {
+  const summaryEl = document.getElementById('summary');
+  summaryEl.innerHTML = ''
+ 
+  const summaryList = separateAndCountByCategory(data);
+  // console.log(summaryList);
+
+  const summaryListMarkup = summaryList.map(note => {
+    const { category, active, archived } = note;
+    return `<li class="note-summary">
+              <span class="category">${category}</span>
+              <span class="active">${active}</span>
+              <span class="archived">${archived}</span>
+            </li>`
+  });
+
+  summaryEl.innerHTML = summaryListMarkup.join();
 };
 
 //-------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', function() {
   addEventListenersToButtons();
-  // renderNotesList(notesData)
 });
