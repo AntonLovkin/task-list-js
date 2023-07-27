@@ -15,6 +15,7 @@
 }
 
 body {
+  position: relative;
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
   margin: 0;
@@ -27,16 +28,10 @@ body {
 
 h1, h2 {
   color:#242424;
+  margin-top: 40px;
 }
 
-/* Container styles */
-.container {
-  text-align: center;
-}
-
-/* Table-like list styles */
-#notesList {
-  list-style-type: none;
+ul, li {
   padding: 0;
 }
 
@@ -55,11 +50,6 @@ span {
   font-weight: bold;
 }
 
-h1 {
-  color: #333;
-  margin-top: 40px;
-}
-
 p {
   color: #666;
   font-size: 18px;
@@ -67,6 +57,7 @@ p {
 }
 
 form {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,6 +66,21 @@ form {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to right, #f06, #4CAF50);
+  background-size: 200% 100%;
+  animation: gradient-shift 5s infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 label {
@@ -101,7 +107,7 @@ button {
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 12px 25px;
+  padding: 12px 12px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -120,7 +126,7 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url('https://cdn.iconscout.com/icon/free/png-256/arrow-down-1767483-1502419.png');
+  background-image: url('./icons/arrow.png');
   background-position: right 10px center;
   background-size: 18px;
   background-repeat: no-repeat;
@@ -143,37 +149,24 @@ button[type="submit"] {
   }
 }
 
-form {
-  background: linear-gradient(to right, #f06, #4CAF50);
-  background-size: 200% 100%;
-  animation: gradient-shift 5s infinite;
+.container {
+  text-align: center;
 }
 
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+#notesList,
+#archivedNotesList {
+  list-style-type: none;
+  padding: 0;
 }
 
 .note-summary {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 10px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   margin-bottom: 5px;
-}
-
-.category {
-  flex: 1;
-  font-weight: bold;
 }
 
 .active,
@@ -187,7 +180,136 @@ form {
 }
 
 .archived {
-  color: red;
+  color: #3498db;
 }
 
+.table-header{
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  gap: 10px;
+  background-color: #e4d5d5;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  color: #242424;
+  font-weight: bold;
+}
 
+.name{
+  flex: 1;
+  min-width: 50px;
+}
+
+.created{
+  flex: 1;
+  min-width: 100px;
+}
+
+.category{
+  /* flex: 1; */
+  min-width: 100px;
+}
+.content{
+  flex: 10;
+  min-width: 200px;
+}
+
+.dates{
+  flex: 1;
+  min-width: 100px;
+}
+
+.edit{
+  display: inline-block;
+  padding: 10px;
+  background-color: inherit;
+  color: #ffffff;
+  border: none;
+
+}
+
+li .edit{
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #d3db34;
+}
+
+.archive{
+  display: inline-block;
+  padding: 10px;
+  background-color: inherit;
+  color: #ffffff;
+  border: none;
+
+}
+
+li .archive{
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #3498db;
+}
+
+.delete{
+  display: inline-block;
+  padding: 14px;
+  background-color: inherit;
+  color: #ffffff;
+  border: none;
+
+}
+
+li .delete{
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #d75454;
+}
+
+.archivedNotes li {
+  background-color: #05dde15b;
+}
+
+.summary-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+  background-color: #87CEFA;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  color: #242424;
+  font-weight: bold;
+}
+
+/* Material Design Colors:
+
+Rosy Brown: #BC8F8F
+Lavender: #E6E6FA
+Light Sky Blue: #87CEFA
+Peach Puff: #FFDAB9
+Pale Green: #98FB98
+Thistle: #D8BFD8
+Gradient Colors:
+
+Gradient from #FF512F to #F09819
+Gradient from #2B5876 to #4E4376
+Gradient from #F9D423 to #FF4E50
+Gradient from #4ECDC4 to #556270
+Vibrant Colors:
+
+Electric Blue: #7DF9FF
+Neon Green: #49FFD0
+Hot Pink: #FF6AB4
+Canary Yellow: #FFEF51
+Dark Mode Colors:
+
+Dark Gray: #333333
+Light Gray: #999999
+Teal: #008080
+Coral: #FF6F61 */
