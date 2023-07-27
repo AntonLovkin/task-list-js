@@ -47,6 +47,7 @@ li {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 10px;
   background-color: #ffffffbe;
   padding: 10px;
   border-radius: 5px;
@@ -180,6 +181,7 @@ button[type="submit"] {
   justify-content: space-around;
   align-items: center;
   padding: 10px;
+  margin: 10px;
   border: 1px solid #ccc;
   background-color: #f9f9f9e8;
   margin-bottom: 5px;
@@ -206,6 +208,7 @@ button[type="submit"] {
   gap: 10px;
   background-color: #e4d5d5;
   padding: 10px;
+  margin: 10px;
   border: 2px solid black;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -296,6 +299,7 @@ li .delete{
   gap: 10px;
   background-color: #87cefa95;
   padding: 10px;
+  margin: 10px;
   margin-top: 50px;
   border: 2px solid black;
   border-radius: 5px;

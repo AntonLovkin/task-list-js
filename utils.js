@@ -13,7 +13,7 @@ function renderNotesList(data) {
     return listMarkup(note, 'archive', "./icons/archive.svg")
   });
 
-  listEl.innerHTML = notesListMarkup.join();
+  listEl.innerHTML = notesListMarkup.join('');
 };
 
 function renderArchivedNotesList(data) {
@@ -24,7 +24,8 @@ function renderArchivedNotesList(data) {
   const notesListMarkup = archivedNotes.map(note => {
     return listMarkup(note, 'unarchive', "./icons/unarchive.svg")
   });
-  listEl.innerHTML = notesListMarkup.join();
+  // console.log(notesListMarkup)
+  listEl.innerHTML = notesListMarkup.join('');
 };
 
 function renderSummaryList(data) {
@@ -42,7 +43,7 @@ function renderSummaryList(data) {
             </li>`
   });
 
-  summaryEl.innerHTML = summaryListMarkup.join();
+  summaryEl.innerHTML = summaryListMarkup.join('');
 };
 
 function separateAndCountByCategory(data) {

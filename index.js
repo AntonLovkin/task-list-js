@@ -53,8 +53,6 @@ let notesData = [
     },
 ];
 
-// let notesData = data;
-
 renderApp(notesData);
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -166,7 +164,7 @@ function showEditForm(note) {
   editForm.setAttribute("id", 'editForm');
   const props = { type: 'edit', name: note.name, content: note.content };
   editForm.innerHTML = formMarkup(props);
-
+  
   editForm.addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -195,13 +193,6 @@ function showEditForm(note) {
     document.body.appendChild(editForm);
   }
 }
-
-// function closeForm(element, htmlId) {
-//   const formEl = document.getElementById(htmlId);
-//   if (formEl) {
-//     formEl.remove();
-//   }
-// }
 
 function createNote (name, content, category) {
     const id = uuidv4();
