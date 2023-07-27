@@ -24,6 +24,10 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+
+  background: linear-gradient(to right, #f06, #4CAF50);
+  background-size: 200% 100%;
+  animation: gradient-shift 5s infinite;
 }
 
 h1, h2 {
@@ -35,11 +39,15 @@ ul, li {
   padding: 0;
 }
 
+select {
+  margin: 0;
+}
+
 li {
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #fff;
+  background-color: #ffffffbe;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -58,12 +66,19 @@ p {
 
 form {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  background-color: #fff;
-  padding: 20px;
+
+  /* margin-top: 20px; */
+  /* background-color: #fff; */
+  /* padding: 20px; */
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(to right, #f06, #4CAF50);
@@ -90,7 +105,7 @@ label {
 input[type="text"],
 select {
   padding: 10px;
-  width: 300px;
+  width: 500px;
   margin: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -104,6 +119,7 @@ select:focus {
 }
 
 button {
+  min-width: 150px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -165,7 +181,7 @@ button[type="submit"] {
   align-items: center;
   padding: 10px;
   border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  background-color: #f9f9f9e8;
   margin-bottom: 5px;
 }
 
@@ -278,38 +294,12 @@ li .delete{
   align-items: center;
   justify-content: space-around;
   gap: 10px;
-  background-color: #87CEFA;
+  background-color: #87cefa95;
   padding: 10px;
+  margin-top: 50px;
   border: 2px solid black;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   color: #242424;
   font-weight: bold;
 }
-
-/* Material Design Colors:
-
-Rosy Brown: #BC8F8F
-Lavender: #E6E6FA
-Light Sky Blue: #87CEFA
-Peach Puff: #FFDAB9
-Pale Green: #98FB98
-Thistle: #D8BFD8
-Gradient Colors:
-
-Gradient from #FF512F to #F09819
-Gradient from #2B5876 to #4E4376
-Gradient from #F9D423 to #FF4E50
-Gradient from #4ECDC4 to #556270
-Vibrant Colors:
-
-Electric Blue: #7DF9FF
-Neon Green: #49FFD0
-Hot Pink: #FF6AB4
-Canary Yellow: #FFEF51
-Dark Mode Colors:
-
-Dark Gray: #333333
-Light Gray: #999999
-Teal: #008080
-Coral: #FF6F61 */
