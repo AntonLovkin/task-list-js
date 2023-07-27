@@ -113,7 +113,7 @@ function listMarkup(note, typeBtn = 'archive', iconSrc = "./icons/archive.svg") 
               <span class="content">${content}</span>
               <span class="dates">${dates}</span>
               <img class="editButton edit" src="./icons/edit.svg" alt="edit button">
-              <img class="${typeBtn}Button archive" src=${iconSrc} alt="${typeBtn} button">
+              <img class="archiveButton archive" src=${iconSrc} alt="${typeBtn} button">
               <img id="delete-btn" class="deleteButton delete" src="./icons/delete.png" alt="delete button">
             </li>`
 };

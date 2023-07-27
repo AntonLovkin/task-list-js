@@ -10,7 +10,7 @@ import {
 
 let notesData = [
     {
-        id: 1,
+        id: uuidv4(),
         createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Idea',
@@ -19,7 +19,7 @@ let notesData = [
         isArchived: true,
     },
     {
-        id: 2,
+        id: uuidv4(),
         createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
@@ -28,7 +28,7 @@ let notesData = [
         isArchived: false,
     },
     {
-        id: 3,
+        id: uuidv4(),
         createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
@@ -36,7 +36,7 @@ let notesData = [
         isArchived: false,
     },
     {
-        id: 4,
+        id: uuidv4(),
         createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
@@ -44,7 +44,7 @@ let notesData = [
         isArchived: false,
     },
     {
-        id: 5,
+        id: uuidv4(),
         createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
@@ -57,6 +57,11 @@ let notesData = [
 
 renderApp(notesData);
 
+document.addEventListener('DOMContentLoaded', function() {
+  addEventListenersToNoteButtons('notesList');
+  addEventListenersToNoteButtons('archivedNotesList');
+});
+
 const createNoteBtnEl = document.getElementById('create-note-btn');
 
 createNoteBtnEl.addEventListener('click', () => showCreateNoteForm(createNoteBtnEl));
@@ -68,46 +73,32 @@ function addEventListenersToNoteButtons(id) {
     const target = event.target;
     const noteId = target.parentElement.getAttribute('id');
 
+     if (target.classList.contains('editButton')) {
+      const note = notesData.find((note) => note.id === noteId);
+      if (note) {
+        showEditForm(note);
+      }
+    }
+
     if (target.classList.contains('archiveButton')) {
       notesData = archiveNote(notesData, noteId);
       renderApp(notesData);
     }
 
     if (target.classList.contains('deleteButton')) {
-      deleteNote(notesData, noteId);
-      renderApp(notesData);
-    }
-    
-    if (target.classList.contains('editButton')) {
-      const note = notesData.find((note) => note.id == noteId);
-      if (note) {
-        showEditForm(note);
-      }
-    }
-    
-    if (target.classList.contains('unarchiveButton')) {
-      notesData = archiveNote(notesData, noteId);
+      notesData = deleteNote(notesData, noteId);
       renderApp(notesData);
     }
   });
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-  addEventListenersToNoteButtons('notesList');
-  addEventListenersToNoteButtons('archivedNotesList');
-});
-
 function deleteNote (list, id) {
-    const noteIndex = list.findIndex((note) => note.id == id);
-
-    if (noteIndex !== -1) {
-        list.splice(noteIndex, 1);
-    } 
+  return list.filter((note) => note.id !== id)
 };
 
 function archiveNote (list, id) {
   const notesList = list.map((note) => {
-    if (note.id == id) {
+    if (note.id === id) {
       return {...note, isArchived: !note.isArchived}
     }
     return note;
@@ -122,11 +113,9 @@ function editNoteContent(noteId, editedContent) {
     note.name = editName;
     note.content = editContent;
     note.category = editCategory;
-    // renderNotesList(notesData);
-      renderApp(notesData);
-  } else {
-    console.log(`Note with ID ${noteId} not found.`);
-  }
+    
+    renderApp(notesData);
+  } 
 }
 
 function showCreateNoteForm(addBtnEl) {
