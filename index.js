@@ -1,34 +1,35 @@
 import './style.css';
-// import { data } from './data';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-    renderApp,
-    getDatesFromNote
-    // showCreateNoteForm,
-    // showEditForm,
+  renderApp,
+  getDatesFromNote,
+  getCurrentDateTime,
+  formMarkup,
 } from './utils';
 
 let notesData = [
     {
         id: 1,
-        createdAt: new Date().toISOString(),
+        createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Idea',
         name: 'Books',
-        isArchived: false,
+        dates: '3/5/2023',
+        isArchived: true,
     },
     {
         id: 2,
-        createdAt: new Date('2023-07-20').toISOString(),
+        createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
-        name: 'Books',
+      name: 'Books',
+        dates: '3/5/2023',
         isArchived: false,
     },
     {
         id: 3,
-        createdAt: new Date('2023-07-20').toISOString(),
+        createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
         name: 'Books',
@@ -36,7 +37,7 @@ let notesData = [
     },
     {
         id: 4,
-        createdAt: new Date('2023-07-20').toISOString(),
+        createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
         name: 'Books',
@@ -44,7 +45,7 @@ let notesData = [
     },
     {
         id: 5,
-        createdAt: new Date('2023-07-20').toISOString(),
+        createdAt: getCurrentDateTime(),
         content: "I'm gonna have a dentist appointment on the 3/5/2023, I moved it from 5/5/2023",
         category: 'Task',
         name: 'Books',
@@ -60,15 +61,8 @@ const createNoteBtnEl = document.getElementById('create-note-btn');
 
 createNoteBtnEl.addEventListener('click', () => showCreateNoteForm(createNoteBtnEl));
 
-function closeAddForm() {
-  const addNoteFormEl = document.getElementById('addNoteForm');
-  if (addNoteFormEl) {
-    addNoteFormEl.remove();
-  }
-};
-
-function addEventListenersToButtons() {
-  const listEl = document.getElementById('notesList');
+function addEventListenersToNoteButtons(id) {
+  const listEl = document.getElementById(id);
 
   listEl.addEventListener('click', function (event) {
     const target = event.target;
@@ -76,28 +70,34 @@ function addEventListenersToButtons() {
 
     if (target.classList.contains('archiveButton')) {
       notesData = archiveNote(notesData, noteId);
-    //   renderNotesList(notesData);
-        renderApp(notesData);
+      renderApp(notesData);
+    }
 
-    } else if (target.classList.contains('deleteButton')) {
-        deleteNote(notesData, noteId);
-        renderApp(notesData);
-    //   renderNotesList(notesData);
-
-    } else if (target.classList.contains('editButton')) {
+    if (target.classList.contains('deleteButton')) {
+      deleteNote(notesData, noteId);
+      renderApp(notesData);
+    }
+    
+    if (target.classList.contains('editButton')) {
       const note = notesData.find((note) => note.id == noteId);
       if (note) {
         showEditForm(note);
       }
     }
+    
+    if (target.classList.contains('unarchiveButton')) {
+      notesData = archiveNote(notesData, noteId);
+      renderApp(notesData);
+    }
   });
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-  addEventListenersToButtons();
+  addEventListenersToNoteButtons('notesList');
+  addEventListenersToNoteButtons('archivedNotesList');
 });
 
-const deleteNote = (list, id) => {
+function deleteNote (list, id) {
     const noteIndex = list.findIndex((note) => note.id == id);
 
     if (noteIndex !== -1) {
@@ -105,7 +105,7 @@ const deleteNote = (list, id) => {
     } 
 };
 
-const archiveNote = (list, id) => {
+function archiveNote (list, id) {
   const notesList = list.map((note) => {
     if (note.id == id) {
       return {...note, isArchived: !note.isArchived}
@@ -115,14 +115,13 @@ const archiveNote = (list, id) => {
   return notesList;
 };
 
-export function editNoteContent(noteId, editedContent) {
+function editNoteContent(noteId, editedContent) {
   const note = notesData.find((note) => note.id === noteId);
   if (note) {
     const { editName, editContent, editCategory } = editedContent;
     note.name = editName;
     note.content = editContent;
     note.category = editCategory;
-    console.log(`Note with ID ${noteId} is edited.`);
     // renderNotesList(notesData);
       renderApp(notesData);
   } else {
@@ -130,27 +129,13 @@ export function editNoteContent(noteId, editedContent) {
   }
 }
 
-export function showCreateNoteForm(element) {
-    element.setAttribute('disabled', "true");
+function showCreateNoteForm(addBtnEl) {
+  addBtnEl.setAttribute('disabled', "true"); 
     
-    const createNoteForm = document.createElement('form');
-    createNoteForm.setAttribute("id", "addNoteForm");
-    createNoteForm.innerHTML = `
-      <label for="noteName">Note Name:</label>
-      <input type="text" id="noteName" required value="New">
-      <label for="noteContent">Note Content:</label>
-      <input type="text" id="noteContent" required value="Buy new plate">
-      <label for="noteCategory">Category:</label>
-      <select id="noteCategory" required>
-        <option value="Task">Task</option>
-        <option value="Random Thought">Random Thought</option>
-        <option value="Idea">Idea</option>
-      </select>
-      <button type="submit">Add Note</button>
-      <button type="button" onclick="closeAddForm()">Cancel</button>
-  `;
-
-  // const formEl = document.getElementById('addNoteForm');
+  const createNoteForm = document.createElement('form');
+  createNoteForm.setAttribute("id", "addNoteForm");
+  const props = { type: 'note', name: '', content: '' };
+  createNoteForm.innerHTML = formMarkup(props);
 
     createNoteForm.addEventListener('submit', onFormSubmit);
 
@@ -173,29 +158,25 @@ export function showCreateNoteForm(element) {
         document.getElementById('noteCategory').value = 'Task';
 
         createNoteForm.remove();
-        element.removeAttribute('disabled');
-    };
+        addBtnEl.removeAttribute('disabled');
+  };
+
+  const cancelButton = createNoteForm.querySelector('#cancel-btn');
+  cancelButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    // closeEditForm();
+    addBtnEl.removeAttribute('disabled');
+    createNoteForm.remove();
+  });
   
   document.body.appendChild(createNoteForm);
 };
 
-export function showEditForm(note) {
+function showEditForm(note) {
   const editForm = document.createElement('form');
-  editForm.setAttribute("id",'editForm' )
-  editForm.innerHTML = `
-      <label for="editName">Note Name:</label>
-      <input type="text" id="editName" required value="${note.name}">
-      <label for="editContent">Note Content:</label>
-      <input type="text" id="editContent" required value="${note.content}">
-      <label for="editCategory">Category:</label>
-      <select id="editCategory" required>
-        <option value="Task">Task</option>
-        <option value="Random Thought">Random Thought</option>
-        <option value="Idea">Idea</option>
-      </select>
-      <button type="submit">Save</button>
-      <button type="button">Cancel</button>
-  `;
+  editForm.setAttribute("id", 'editForm');
+  const props = { type: 'edit', name: note.name, content: note.content };
+  editForm.innerHTML = formMarkup(props);
 
   editForm.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -206,8 +187,16 @@ export function showEditForm(note) {
     
     if (editContent.trim() !== '') {
       editNoteContent(note.id, { editName, editContent, editCategory });
-      closeEditForm();
+      // closeEditForm();
+      editForm.remove();
     }
+  });
+
+  const cancelButton = editForm.querySelector('#cancel-btn');
+  cancelButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    // closeEditForm();
+    editForm.remove();
   });
 
   const existingEditForm = document.getElementById('editForm');
@@ -218,20 +207,20 @@ export function showEditForm(note) {
   }
 }
 
-const createNote = (name, content, category) => {
+// function closeForm(element, htmlId) {
+//   const formEl = document.getElementById(htmlId);
+//   if (formEl) {
+//     formEl.remove();
+//   }
+// }
+
+function createNote (name, content, category) {
     const id = uuidv4();
     const dates = getDatesFromNote(content);
-    return { id, name, content, category, dates, createdAt: new Date().toISOString(), isArchived: false };
+    return { id, name, content, category, dates, createdAt: getCurrentDateTime(), isArchived: false };
 };
 
-const addNote = (note, list) => {
+function addNote (note, list) {
     list.push(note)
 };
 
-function closeEditForm() {
-  const editForm = document.getElementById('editForm');
-  console.log(editForm)
-  if (editForm) {
-    editForm.remove();
-  }
-}
